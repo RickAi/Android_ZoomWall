@@ -1,7 +1,6 @@
 package top.navyblue.zoomwall.views.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +17,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import top.navyblue.zoomwall.R;
 import top.navyblue.zoomwall.models.bean.Pictures;
-import top.navyblue.zoomwall.views.activites.PictureActivity;
 
 /**
  * Created by CIR on 8/9/15.
@@ -74,10 +72,17 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
     @Override
     public void onClick(View v) {
         Pictures.Picture picture = (Pictures.Picture) v.getTag();
-        String url = picture.getUrl();
-        Intent intent = new Intent(mContext, PictureActivity.class);
-        intent.putExtra(PictureActivity.PICTURE_URL, url);
-        mContext.startActivity(intent);
+        mOnPictureClickListener.onPictureClick(v, picture);
+    }
+
+    public interface OnPictureClickListener{
+        void onPictureClick(View pictureView, Pictures.Picture picture);
+    }
+
+    private OnPictureClickListener mOnPictureClickListener;
+
+    public void setOnPictureClickListener(OnPictureClickListener onPictureClickListener){
+        mOnPictureClickListener = onPictureClickListener;
     }
 
     public static class PictureViewHolder extends RecyclerView.ViewHolder {

@@ -1,10 +1,11 @@
 package top.navyblue.zoomwall.views.activites;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,24 +19,31 @@ import top.navyblue.zoomwall.R;
 import top.navyblue.zoomwall.utils.FormatUtils;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class PictureActivity extends Activity {
+public class PictureActivity extends ToolbarActivity {
 
     static final String PHOTO_TAP_TOAST_STRING = "Photo Tap! X: %.2f %% Y:%.2f %% ID: %d";
     static final String SCALE_TOAST_STRING = "Scaled to: %.2ff";
 
     public static String PICTURE_URL = "picture";
+    public static String PICTURE_TITLE = "picture_title";
+
+
     @Bind(R.id.sdv_picture)
     SimpleDraweeView mSdvPicture;
     private Toast mCurrentToast;
 
-
+    private String mPictureTitle;
     private String mPictureUrl;
     private PhotoViewAttacher mAttacher;
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_picture;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_picture);
         ButterKnife.bind(this);
 
         init();
@@ -45,13 +53,30 @@ public class PictureActivity extends Activity {
         Intent intent = getIntent();
         String previewUrl = intent.getStringExtra(PICTURE_URL);
         mPictureUrl = FormatUtils.getBigPicutreUrl(previewUrl);
+        mPictureTitle = intent.getStringExtra(PICTURE_TITLE);
+        mAttacher = new PhotoViewAttacher(mSdvPicture);
 
         Uri uri = Uri.parse(mPictureUrl);
         mSdvPicture.setImageURI(uri);
-        mAttacher = new PhotoViewAttacher(mSdvPicture);
-        mAttacher.setOnMatrixChangeListener(new MatrixChangeListener());
-        mAttacher.setOnPhotoTapListener(new PhotoTapListener());
+        setAppBarAlpha(0.7f);
+        setTitle(mPictureTitle);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        ViewCompat.setTransitionName(mSdvPicture, PICTURE_URL);
+        mAttacher.setOnViewTapListener(
+                new PhotoViewAttacher.OnViewTapListener() {
+                    @Override
+                    public void onViewTap(View view, float v, float v1) {
+                        hideOrShowToolbar();
+                    }
+                }
+        );
+
     }
+
 
     @Override
     protected void onDestroy() {

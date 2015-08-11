@@ -12,6 +12,7 @@ import android.view.View;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import top.navyblue.zoomwall.R;
+import top.navyblue.zoomwall.models.bean.Pictures;
 import top.navyblue.zoomwall.presenters.abs.PicturePresenter;
 import top.navyblue.zoomwall.presenters.impl.PicturePresenterImpl;
 import top.navyblue.zoomwall.views.adapters.PictureRecyclerAdapter;
@@ -30,7 +31,6 @@ public class MainActivity extends SwipeRefreshBaseActivity {
     private int visibleItemCount;
     private int totalItemCount;
     private int pastVisiblesItems;
-
 
 
     @Override
@@ -77,6 +77,14 @@ public class MainActivity extends SwipeRefreshBaseActivity {
                     mSwipeRefreshLayout.setRefreshing(true);
                     mPicturePresenter.loadNext();
                 }
+            }
+        });
+
+        mPictureAdapter.setOnPictureClickListener(new PictureRecyclerAdapter.OnPictureClickListener(){
+
+            @Override
+            public void onPictureClick(View pictureView, Pictures.Picture picture) {
+                mPicturePresenter.loadPicture(pictureView, picture);
             }
         });
     }
