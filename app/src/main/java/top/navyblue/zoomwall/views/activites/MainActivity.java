@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -61,7 +62,7 @@ public class MainActivity extends SwipeRefreshBaseActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        mRvPictures.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRvPictures.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -124,5 +125,10 @@ public class MainActivity extends SwipeRefreshBaseActivity {
         super.onDestroy();
 
         ButterKnife.unbind(this);
+    }
+
+    public void onFab(View view) {
+        mRvPictures.smoothScrollToPosition(0);
+        requestFirstPage();
     }
 }

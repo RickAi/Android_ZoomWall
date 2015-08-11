@@ -21,6 +21,7 @@ public class PicturePresenterImpl implements PicturePresenter {
     private List<Pictures.Picture> mCurrentList;
     private Gson mGson;
     private String mNextPage;
+    private String mNextPageCache;
 
     private MainActivity mActivity;
 
@@ -29,6 +30,8 @@ public class PicturePresenterImpl implements PicturePresenter {
         mActivity = activity;
 
         init();
+        mNextPage = "";
+        mNextPageCache = "";
     }
 
     private void init() {
@@ -71,7 +74,10 @@ public class PicturePresenterImpl implements PicturePresenter {
                 mCurrentList = mCurrentPicture.getData();
                 mNextPage = mCurrentPicture.getNext_page_url();
 
-                mActivity.getAdapter().addNextPage(mCurrentList);
+                if(!mNextPageCache.equals(mNextPage)){
+                    mActivity.getAdapter().addNextPage(mCurrentList);
+                    mNextPageCache = mNextPage;
+                }
                 mActivity.setRefreshing(false);
             }
 

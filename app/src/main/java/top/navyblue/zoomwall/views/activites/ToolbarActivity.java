@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import butterknife.ButterKnife;
 import top.navyblue.zoomwall.R;
 
 public abstract class ToolbarActivity extends AppCompatActivity {
@@ -28,8 +27,8 @@ public abstract class ToolbarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResource());
 
-        mAppBar = ButterKnife.findById(this, R.id.app_bar_layout);
-        mToolbar = ButterKnife.findById(this, R.id.toolbar);
+        mAppBar = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
     @Override
