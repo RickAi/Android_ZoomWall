@@ -37,14 +37,17 @@ public abstract class SwipeRefreshBaseActivity extends ToolbarActivity {
                     new SwipeRefreshLayout.OnRefreshListener() {
                         @Override
                         public void onRefresh() {
-                            requestDataRefresh();
+                            requestFirstPage();
                         }
                     }
             );
         }
+
+        // init the page when first enter
+        requestFirstPage();
     }
 
-    public void requestDataRefresh() {}
+    public void requestFirstPage() {}
 
     public void setRefreshing(boolean refreshing) {
         if (mSwipeRefreshLayout == null) {

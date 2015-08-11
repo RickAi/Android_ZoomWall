@@ -8,35 +8,25 @@
     <include
         android:id="@+id/main_toolbar" layout="@layout/toolbar"/>
 
-    <com.ogaclejapan.smarttablayout.SmartTabLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_below="@id/main_toolbar"
-        android:id="@+id/viewpagertab"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:clipToPadding="false"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:background="@color/primary"
-        app:stl_defaultTabTextColor="@color/white"
-        app:stl_defaultTabTextHorizontalPadding="18dp"
-        app:stl_dividerColor="@color/transparent"
-        app:stl_dividerThickness="0dp"
-        app:stl_indicatorColor="@color/primary_dark"
-        app:stl_indicatorCornerRadius="18dp"
-        app:stl_indicatorInterpolation="smart"
-        app:stl_indicatorGravity="center"
-        app:stl_indicatorThickness="36dp"
-        app:stl_underlineColor="@color/transparent"
-        app:stl_underlineThickness="0dp"
-        android:fillViewport="false"/>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/viewpagertab"
-        />
+        android:layout_below="@id/main_toolbar">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_pictures"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
 
 </RelativeLayout>

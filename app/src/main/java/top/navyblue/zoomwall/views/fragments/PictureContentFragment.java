@@ -56,7 +56,7 @@ public class PictureContentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_picture_content, container, false);
         ButterKnife.bind(this, view);
 
-        mPictureAdapter = new PictureRecyclerAdapter(mContext, mPictureType);
+        mPictureAdapter = new PictureRecyclerAdapter(mContext);
         mRvPictures.setLayoutManager(mLayoutManager);
         mRvPictures.setAdapter(mPictureAdapter);
 
@@ -79,7 +79,6 @@ public class PictureContentFragment extends Fragment {
                 if (mIsLoading) {
                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                         Log.v("...", "Last Item Wow !");
-                        mPictureAdapter.nextLoad();
                     }
                 }
             }

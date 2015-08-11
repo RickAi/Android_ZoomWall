@@ -8,19 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import top.navyblue.zoomwall.R;
-import top.navyblue.zoomwall.managers.DataLoader;
-import top.navyblue.zoomwall.managers.volley.RequestListener;
 import top.navyblue.zoomwall.models.bean.Pictures;
 import top.navyblue.zoomwall.views.activites.PictureActivity;
 
@@ -35,51 +31,21 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
     private Context mContext;
     private Pictures mPictures;
     private List<Pictures.Picture> mPictureList;
-    private String mType;
-    private Gson mGson;
 
-    public PictureRecyclerAdapter(Context context, String type) {
+    public PictureRecyclerAdapter(Context context) {
         mContext = context;
-        mType = type;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mGson = new Gson();
-
-        firstLoad();
+        mPictureList = new ArrayList<Pictures.Picture>();
     }
 
-    private void firstLoad() {
-        DataLoader.loadPictures(mType, null, new RequestListener() {
-            @Override
-            public void requestSuccess(String json) {
-                mPictures = mGson.fromJson(json, Pictures.class);
-                mPictureList = mPictures.getData();
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void requestError(VolleyError e) {
-
-            }
-        });
+    public void setFirstPage(List<Pictures.Picture> pictureList){
+        mPictureList = pictureList;
+        notifyDataSetChanged();
     }
 
-
-    public void nextLoad() {
-        String nextPageUrl = mPictures.getNext_page_url();
-        DataLoader.loadPictures(mType, nextPageUrl, new RequestListener() {
-            @Override
-            public void requestSuccess(String json) {
-                mPictures = mGson.fromJson(json, Pictures.class);
-                mPictureList.addAll(mPictures.getData());
-                mPictures.setData(mPictureList);
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void requestError(VolleyError e) {
-
-            }
-        });
+    public void addNextPage(List<Pictures.Picture> pictureList){
+        mPictureList.addAll(pictureList);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -98,7 +64,6 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
         Log.e(TAG, picture.getUrl());
 
         holder.mSdvPicture.setImageURI(uri);
-        holder.mTvCreatedAt.setText(picture.getCreated_at());
     }
 
     @Override
@@ -121,8 +86,6 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
 
         @Bind(R.id.sdv_picture)
         SimpleDraweeView mSdvPicture;
-        @Bind(R.id.tv_created_at)
-        TextView mTvCreatedAt;
 
         public PictureViewHolder(View itemView) {
             super(itemView);
