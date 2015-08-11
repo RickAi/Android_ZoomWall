@@ -1,7 +1,6 @@
 package top.navyblue.zoomwall.views.activites;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +18,7 @@ import top.navyblue.zoomwall.views.fragments.MovieFragment;
 import top.navyblue.zoomwall.views.fragments.PictureContentFragment;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends SwipeRefreshBaseActivity {
 
     @Bind(R.id.viewpagertab)
     SmartTabLayout mViewpagertab;
@@ -27,9 +26,13 @@ public class MainActivity extends FragmentActivity {
     ViewPager mViewpager;
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_main;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         initComponents();

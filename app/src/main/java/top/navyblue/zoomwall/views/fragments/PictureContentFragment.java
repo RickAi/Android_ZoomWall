@@ -85,6 +85,7 @@ public class PictureContentFragment extends Fragment {
             }
         });
 
+
     }
 
     @Override

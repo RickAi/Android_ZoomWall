@@ -1,6 +1,7 @@
 package top.navyblue.zoomwall.views.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,11 +22,13 @@ import top.navyblue.zoomwall.R;
 import top.navyblue.zoomwall.managers.DataLoader;
 import top.navyblue.zoomwall.managers.volley.RequestListener;
 import top.navyblue.zoomwall.models.bean.Pictures;
+import top.navyblue.zoomwall.views.activites.PictureActivity;
 
 /**
  * Created by CIR on 8/9/15.
  */
-public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecyclerAdapter.PictureViewHolder> {
+public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecyclerAdapter.PictureViewHolder>
+        implements View.OnClickListener {
     public static final String TAG = "PictureRecyclerAdapter";
 
     private LayoutInflater mInflater;
@@ -81,12 +84,15 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
 
     @Override
     public PictureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PictureViewHolder(mInflater.inflate(R.layout.item_picture, parent, false));
+        View view = mInflater.inflate(R.layout.item_picture, parent, false);
+        view.setOnClickListener(this);
+        return new PictureViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(PictureViewHolder holder, int position) {
         Pictures.Picture picture = mPictureList.get(position);
+        holder.view.setTag(picture);
 
         Uri uri = Uri.parse(picture.getUrl());
         Log.e(TAG, picture.getUrl());
@@ -100,7 +106,18 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
         return mPictureList == null?0:mPictureList.size();
     }
 
+    @Override
+    public void onClick(View v) {
+        Pictures.Picture picture = (Pictures.Picture) v.getTag();
+        String url = picture.getUrl();
+        Intent intent = new Intent(mContext, PictureActivity.class);
+        intent.putExtra(PictureActivity.PICTURE_URL, url);
+        mContext.startActivity(intent);
+    }
+
     public static class PictureViewHolder extends RecyclerView.ViewHolder {
+
+        private View view;
 
         @Bind(R.id.sdv_picture)
         SimpleDraweeView mSdvPicture;
@@ -109,6 +126,7 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
 
         public PictureViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
 
             ButterKnife.bind(this, itemView);
         }
