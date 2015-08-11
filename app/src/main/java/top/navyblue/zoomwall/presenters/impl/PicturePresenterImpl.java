@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -18,6 +22,7 @@ import top.navyblue.zoomwall.utils.Constants;
 import top.navyblue.zoomwall.utils.FormatUtils;
 import top.navyblue.zoomwall.views.activites.MainActivity;
 import top.navyblue.zoomwall.views.activites.PictureActivity;
+import top.navyblue.zoomwall.views.adapters.PictureRecyclerAdapter;
 
 /**
  * Created by CIR on 8/11/15.
@@ -95,14 +100,44 @@ public class PicturePresenterImpl implements PicturePresenter {
         });
     }
 
+    /**
+     *
+     * @param pictureView
+     * @param hiddenImage
+     * @param holder
+     *
+     *
+     * pictureView is the Image in the list
+     * hiddenImage is a temp ImageView which can cache the large image
+     * holder contain all the info about the item in the list
+     *
+     */
     @Override
-    public void loadPicture(View pictureView, Pictures.Picture picture) {
-        Intent intent = new Intent(mActivity, PictureActivity.class);
-        intent.putExtra(PictureActivity.PICTURE_URL, FormatUtils.getBigPicutreUrl(picture.getUrl()));
-        intent.putExtra(PictureActivity.PICTURE_TITLE, picture.getCreated_at());
-        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                mActivity, pictureView, PictureActivity.PICTURE_URL);
-        ActivityCompat.startActivity(mActivity, intent, optionsCompat.toBundle());
+    public void loadPicture(final View pictureView, View hiddenImage, PictureRecyclerAdapter.PictureViewHolder holder) {
+        SimpleDraweeView sdv = holder.mSdvPicture;
+        final Pictures.Picture picture = holder.mPicture;
+        final String bigPictureUrl = FormatUtils.getBigPicutreUrl(picture.getUrl());
+
+        Picasso.with(mActivity).load(bigPictureUrl).into((ImageView) hiddenImage, new Callback() {
+            @Override
+            public void onSuccess() {
+
+                // init intent
+                Intent intent = new Intent(mActivity, PictureActivity.class);
+                intent.putExtra(PictureActivity.PICTURE_URL, bigPictureUrl);
+                intent.putExtra(PictureActivity.PICTURE_TITLE, picture.getCreated_at());
+
+                // start activity
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        mActivity, pictureView, PictureActivity.PICTURE_URL);
+                ActivityCompat.startActivity(mActivity, intent, optionsCompat.toBundle());
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
 }

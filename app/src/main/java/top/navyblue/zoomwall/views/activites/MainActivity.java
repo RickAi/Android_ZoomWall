@@ -8,11 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import top.navyblue.zoomwall.R;
-import top.navyblue.zoomwall.models.bean.Pictures;
 import top.navyblue.zoomwall.presenters.abs.PicturePresenter;
 import top.navyblue.zoomwall.presenters.impl.PicturePresenterImpl;
 import top.navyblue.zoomwall.views.adapters.PictureRecyclerAdapter;
@@ -22,6 +22,8 @@ public class MainActivity extends SwipeRefreshBaseActivity {
 
     @Bind(R.id.rv_pictures)
     RecyclerView mRvPictures;
+    @Bind(R.id.hack_imageView)
+    ImageView mHiddenImage;
 
     private PictureRecyclerAdapter mPictureAdapter;
     private Context mContext;
@@ -83,8 +85,8 @@ public class MainActivity extends SwipeRefreshBaseActivity {
         mPictureAdapter.setOnPictureClickListener(new PictureRecyclerAdapter.OnPictureClickListener(){
 
             @Override
-            public void onPictureClick(View pictureView, Pictures.Picture picture) {
-                mPicturePresenter.loadPicture(pictureView, picture);
+            public void onPictureClick(View pictureView, PictureRecyclerAdapter.PictureViewHolder holder) {
+                mPicturePresenter.loadPicture(pictureView, mHiddenImage, holder);
             }
         });
     }

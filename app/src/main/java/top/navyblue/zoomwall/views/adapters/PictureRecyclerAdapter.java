@@ -56,7 +56,8 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
     @Override
     public void onBindViewHolder(PictureViewHolder holder, int position) {
         Pictures.Picture picture = mPictureList.get(position);
-        holder.view.setTag(picture);
+        holder.mPicture = picture;
+        holder.view.setTag(holder);
 
         Uri uri = Uri.parse(picture.getUrl());
         Log.e(TAG, picture.getUrl());
@@ -71,12 +72,12 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
 
     @Override
     public void onClick(View v) {
-        Pictures.Picture picture = (Pictures.Picture) v.getTag();
-        mOnPictureClickListener.onPictureClick(v, picture);
+        PictureViewHolder holder = (PictureViewHolder) v.getTag();
+        mOnPictureClickListener.onPictureClick(v, holder);
     }
 
     public interface OnPictureClickListener{
-        void onPictureClick(View pictureView, Pictures.Picture picture);
+        void onPictureClick(View pictureView, PictureViewHolder holder);
     }
 
     private OnPictureClickListener mOnPictureClickListener;
@@ -90,7 +91,8 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
         private View view;
 
         @Bind(R.id.sdv_picture)
-        SimpleDraweeView mSdvPicture;
+        public SimpleDraweeView mSdvPicture;
+        public Pictures.Picture mPicture;
 
         public PictureViewHolder(View itemView) {
             super(itemView);
