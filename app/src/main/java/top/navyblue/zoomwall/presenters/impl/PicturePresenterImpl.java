@@ -4,13 +4,9 @@ import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -114,30 +110,18 @@ public class PicturePresenterImpl implements PicturePresenter {
      */
     @Override
     public void loadPicture(final View pictureView, View hiddenImage, PictureRecyclerAdapter.PictureViewHolder holder) {
-        SimpleDraweeView sdv = holder.mSdvPicture;
         final Pictures.Picture picture = holder.mPicture;
         final String bigPictureUrl = FormatUtils.getBigPicutreUrl(picture.getUrl());
 
-        Picasso.with(mActivity).load(bigPictureUrl).into((ImageView) hiddenImage, new Callback() {
-            @Override
-            public void onSuccess() {
+        Intent intent = new Intent(mActivity, PictureActivity.class);
+        intent.putExtra(PictureActivity.PICTURE_URL, bigPictureUrl);
+        intent.putExtra(PictureActivity.PICTURE_TITLE, picture.getCreated_at());
 
-                // init intent
-                Intent intent = new Intent(mActivity, PictureActivity.class);
-                intent.putExtra(PictureActivity.PICTURE_URL, bigPictureUrl);
-                intent.putExtra(PictureActivity.PICTURE_TITLE, picture.getCreated_at());
+        // start activity
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                mActivity, pictureView, PictureActivity.PICTURE_URL);
+        ActivityCompat.startActivity(mActivity, intent, optionsCompat.toBundle());
 
-                // start activity
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        mActivity, pictureView, PictureActivity.PICTURE_URL);
-                ActivityCompat.startActivity(mActivity, intent, optionsCompat.toBundle());
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });
     }
 
 }

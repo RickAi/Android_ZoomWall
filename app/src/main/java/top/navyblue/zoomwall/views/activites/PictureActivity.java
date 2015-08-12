@@ -1,17 +1,17 @@
 package top.navyblue.zoomwall.views.activites;
 
 import android.content.Intent;
-import android.graphics.RectF;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,8 +28,8 @@ public class PictureActivity extends ToolbarActivity {
     public static String PICTURE_TITLE = "picture_title";
 
 
-    @Bind(R.id.sdv_picture)
-    SimpleDraweeView mSdvPicture;
+    @Bind(R.id.iv_picture)
+    ImageView mIvPicture;
     private Toast mCurrentToast;
 
     private String mPictureTitle;
@@ -46,18 +46,21 @@ public class PictureActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
 
-        init();
+        initData();
+        initComponent();
     }
 
-    private void init() {
+    // init the data that needed in this activity
+    private void initData() {
         Intent intent = getIntent();
         String previewUrl = intent.getStringExtra(PICTURE_URL);
         mPictureUrl = FormatUtils.getBigPicutreUrl(previewUrl);
         mPictureTitle = intent.getStringExtra(PICTURE_TITLE);
-        mAttacher = new PhotoViewAttacher(mSdvPicture);
+        mAttacher = new PhotoViewAttacher(mIvPicture);
+    }
 
-        Uri uri = Uri.parse(mPictureUrl);
-        mSdvPicture.setImageURI(uri);
+    // init the toolbar and imageview in this activity
+    private void initComponent() {
         setAppBarAlpha(0.7f);
         setTitle(mPictureTitle);
         ActionBar actionBar = getSupportActionBar();
@@ -65,7 +68,7 @@ public class PictureActivity extends ToolbarActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        ViewCompat.setTransitionName(mSdvPicture, PICTURE_URL);
+        ViewCompat.setTransitionName(mIvPicture, PICTURE_URL);
         mAttacher.setOnViewTapListener(
                 new PhotoViewAttacher.OnViewTapListener() {
                     @Override
@@ -75,8 +78,18 @@ public class PictureActivity extends ToolbarActivity {
                 }
         );
 
-    }
+        Picasso.with(this).load(mPictureUrl).into(mIvPicture, new Callback() {
+            @Override
+            public void onSuccess() {
 
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+    }
 
     @Override
     protected void onDestroy() {
@@ -117,23 +130,4 @@ public class PictureActivity extends ToolbarActivity {
         mCurrentToast.show();
     }
 
-    private class PhotoTapListener implements PhotoViewAttacher.OnPhotoTapListener {
-
-
-        @Override
-        public void onPhotoTap(View view, float x, float y) {
-            float xPercentage = x * 100f;
-            float yPercentage = y * 100f;
-
-            showToast(String.format(PHOTO_TAP_TOAST_STRING, xPercentage, yPercentage, view == null ? 0 : view.getId()));
-        }
-    }
-
-    private class MatrixChangeListener implements PhotoViewAttacher.OnMatrixChangedListener {
-
-
-        @Override
-        public void onMatrixChanged(RectF rect) {
-        }
-    }
 }
