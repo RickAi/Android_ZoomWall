@@ -12,4 +12,4 @@
 * [ViewPagerTransforms](https://github.com/ToxicBakery/ViewPagerTransforms)
 * [SmartTabLayout](https://github.com/ogaclejapan/SmartTabLayout)
 * Gson
-* 
+* [navasmdc/MaterialDesignLibrary](https://github.com/navasmdc/MaterialDesignLibrary)

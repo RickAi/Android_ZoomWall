@@ -17,12 +17,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import top.navyblue.zoomwall.R;
 import top.navyblue.zoomwall.utils.FormatUtils;
+import top.navyblue.zoomwall.views.widgets.CircularProgress;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PictureActivity extends ToolbarActivity {
-
-    static final String PHOTO_TAP_TOAST_STRING = "Photo Tap! X: %.2f %% Y:%.2f %% ID: %d";
-    static final String SCALE_TOAST_STRING = "Scaled to: %.2ff";
 
     public static String PICTURE_URL = "picture";
     public static String PICTURE_TITLE = "picture_title";
@@ -30,6 +28,9 @@ public class PictureActivity extends ToolbarActivity {
 
     @Bind(R.id.iv_picture)
     ImageView mIvPicture;
+    @Bind(R.id.progressbar)
+    CircularProgress mProgressbar;
+
     private Toast mCurrentToast;
 
     private String mPictureTitle;
@@ -81,7 +82,7 @@ public class PictureActivity extends ToolbarActivity {
         Picasso.with(this).load(mPictureUrl).into(mIvPicture, new Callback() {
             @Override
             public void onSuccess() {
-
+                mProgressbar.setVisibility(View.GONE);
             }
 
             @Override

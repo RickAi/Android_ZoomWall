@@ -4,4 +4,9 @@
         <attr name="foreground" format="reference" />
     </declare-styleable>
 
+
+    <declare-styleable name="CircularProgress">
+        <attr name="borderWidths" format="dimension" />
+    </declare-styleable>
+
 </resources>
